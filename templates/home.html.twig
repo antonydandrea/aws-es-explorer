@@ -1,3 +1,34 @@
 {% extends "main.html.twig" %}
 {% block content %}
+    <div>
+        <h1>AWS ElasticSearch Explorer</h1>
+        <div>
+            <p>Enter the Access Token and Secret Key of an AWS account with permission to access ElasticSearch service. Note that these are NOT stored.</p>
+        </div>
+        <form method="POST">
+            <input name="server" />
+            <input name="access_token" />
+            <input name="secret_key" />
+            <input name="region" />
+            <input type="submit" value="Connect" />
+        </form>
+        {% if host is defined and host is not empty %}
+            <div id="connect_status"><p style="font-weight: bold;">Connected to {{ host }}</p></div>
+            <div id="indices">
+                <p>Indicies are listed below with their aliases in brackets:</p>
+                {% if indices is defined and indices is not empty %}
+                    {% for name, details in indices %}
+                        <p class="index" id="{{ name }}">
+                            {{ name }}
+                            {% if details['aliases'] is not empty %}
+                                ({{ details['aliases']|keys|join(', ') }})
+                            {% endif %}
+                        </p>
+                    {% endfor %}
+                {% else %}
+                    <p>No indicies found at this host.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
