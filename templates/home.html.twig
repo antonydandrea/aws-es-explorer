@@ -1,33 +1,57 @@
 {% extends "main.html.twig" %}
 {% block content %}
-    <div>
-        <h1>AWS ElasticSearch Explorer</h1>
+    <div class="container">
+        <h1 class="text-center">AWS ElasticSearch Explorer</h1>
         <div>
             <p>Enter the Access Token and Secret Key of an AWS account with permission to access ElasticSearch service. Note that these are NOT stored.</p>
         </div>
-        <form method="POST">
-            <input name="server" />
-            <input name="access_token" />
-            <input name="secret_key" />
-            <input name="region" />
-            <input type="submit" value="Connect" />
+        <form method="POST" class="form-inline">
+            <div class="form-group">
+                <label for="server">Server:</label>
+                <input type="text" class="form-control" name="server" id="server">
+            </div>
+            <div class="form-group">
+                <label for="access_token">Access Token:</label>
+                <input type="text" class="form-control" name="access_token" id="access_token">
+            </div>
+            <div class="form-group">
+                <label for="secret_key">Secret Key:</label>
+                <input type="text" class="form-control" name="secret_key" id="secret_key">
+            </div>
+            <div class="form-group">
+                <label for="region">Region:</label>
+                <input type="text" class="form-control" name="region" id="region">
+            </div>
+            <button type="submit" class="btn btn-default">Connect</button>
         </form>
         {% if host is defined and host is not empty %}
-            <div id="connect_status"><p style="font-weight: bold;">Connected to {{ host }}</p></div>
-            <div id="indices">
-                <p>Indicies are listed below with their aliases in brackets:</p>
-                {% if indices is defined and indices is not empty %}
-                    {% for name, details in indices %}
-                        <p class="index" id="{{ name }}">
-                            {{ name }}
-                            {% if details['aliases'] is not empty %}
-                                ({{ details['aliases']|keys|join(', ') }})
-                            {% endif %}
-                        </p>
-                    {% endfor %}
-                {% else %}
-                    <p>No indicies found at this host.</p>
-                {% endif %}
+            <div id="output">
+                <div id="connect_status"><p style="font-weight: bold;">Connected to {{ host }}</p></div>
+                <div style="margin-top:25px;" id="indices">
+                    <p>Indicies are listed below with their aliases in brackets:</p>
+                    {% if indices is defined and indices is not empty %}
+                        {% for name, details in indices %}
+                            <p class="index" id="{{ name }}">
+                                {{ name }}
+                                {% if details['aliases'] is not empty %}
+                                    ({{ details['aliases']|keys|join(', ') }})
+                                {% endif %}
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        <p>No indicies found at this host.</p>
+                    {% endif %}
+                </div>
+                <div id="es_interface">
+                    <div class="row">
+                        <div class="col-xs-6" id="input">
+                            <p>Write your ElasticSearch query below:</p>
+                        </div>
+                        <div class="col-xs-6" id="output">
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         {% endif %}
     </div>
